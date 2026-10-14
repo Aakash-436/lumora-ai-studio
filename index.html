@@ -1,0 +1,1126 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lumora AI — DeepLearn Hub | The Next Generation Visual Learning Agent</title>
+  <meta name="description" content="Understand anything. Visualize everything. Learn your way. Transform any question, document, YouTube video, or article into an interactive visual learning experience." />
+  <style>
+    /* ==========================================================================
+       APPLE-INSPIRED LIQUID GLASS DESIGN SYSTEM — TOKENS & THEMES
+       ========================================================================== */
+    :root, [data-theme="dark"] {
+      --bg-base: #07090f;
+      --bg-elevated: #0d121d;
+      --bg-mesh-1: rgba(56, 189, 248, 0.13);
+      --bg-mesh-2: rgba(167, 139, 250, 0.12);
+      --bg-mesh-3: rgba(96, 165, 250, 0.09);
+      --glass-surface: rgba(17, 24, 39, 0.68);
+      --glass-surface-hover: rgba(26, 36, 56, 0.78);
+      --glass-surface-strong: rgba(13, 19, 33, 0.88);
+      --glass-card: rgba(255, 255, 255, 0.045);
+      --glass-border: rgba(255, 255, 255, 0.11);
+      --glass-border-highlight: rgba(255, 255, 255, 0.22);
+      --glass-shadow: 0 20px 50px rgba(0, 0, 0, 0.48), inset 0 1px 0 rgba(255, 255, 255, 0.14);
+      --text-primary: #f8fafc;
+      --text-secondary: #cbd5e1;
+      --text-muted: #94a3b8;
+      --accent-ice: #60a5fa;
+      --accent-cyan: #38bdf8;
+      --accent-violet: #a78bfa;
+      --accent-emerald: #34d399;
+      --accent-amber: #fbbf24;
+      --accent-rose: #fb7185;
+      --code-bg: rgba(9, 13, 22, 0.92);
+      --badge-bg: rgba(56, 189, 248, 0.14);
+      --badge-text: #7dd3fc;
+      --focus-ring: 0 0 0 3px rgba(56, 189, 248, 0.45);
+      --radius-xl: 22px;
+      --radius-lg: 16px;
+      --radius-md: 12px;
+      --radius-sm: 8px;
+      --transition-fluid: 240ms cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    [data-theme="light"] {
+      --bg-base: #f1f5f9;
+      --bg-elevated: #ffffff;
+      --bg-mesh-1: rgba(56, 189, 248, 0.16);
+      --bg-mesh-2: rgba(139, 92, 246, 0.11);
+      --bg-mesh-3: rgba(14, 165, 233, 0.10);
+      --glass-surface: rgba(255, 255, 255, 0.78);
+      --glass-surface-hover: rgba(255, 255, 255, 0.92);
+      --glass-surface-strong: rgba(255, 255, 255, 0.95);
+      --glass-card: rgba(15, 23, 42, 0.035);
+      --glass-border: rgba(15, 23, 42, 0.11);
+      --glass-border-highlight: rgba(14, 165, 233, 0.35);
+      --glass-shadow: 0 16px 40px rgba(15, 23, 42, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.85);
+      --text-primary: #0f172a;
+      --text-secondary: #334155;
+      --text-muted: #64748b;
+      --accent-ice: #2563eb;
+      --accent-cyan: #0284c7;
+      --accent-violet: #7c3aed;
+      --accent-emerald: #059669;
+      --accent-amber: #d97706;
+      --accent-rose: #e11d48;
+      --code-bg: #0f172a;
+      --badge-bg: rgba(2, 132, 199, 0.12);
+      --badge-text: #0369a1;
+      --focus-ring: 0 0 0 3px rgba(2, 132, 199, 0.38);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
+    body.reduced-motion *, body.reduced-motion *::before, body.reduced-motion *::after {
+      animation: none !important;
+      transition: none !important;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "Inter", "Geist", "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg-base);
+      color: var(--text-primary);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      transition: background-color var(--transition-fluid), color var(--transition-fluid);
+    }
+
+    /* Ambient Liquid Mesh Background */
+    .ambient-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 16% 18%, var(--bg-mesh-1), transparent 42%),
+        radial-gradient(circle at 84% 22%, var(--bg-mesh-2), transparent 46%),
+        radial-gradient(circle at 50% 82%, var(--bg-mesh-3), transparent 50%),
+        var(--bg-base);
+    }
+
+    /* Liquid Glass Surface Primitives with Opaque Fallback */
+    .glass-panel {
+      background: var(--glass-surface);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--glass-shadow);
+      backdrop-filter: blur(26px) saturate(165%);
+      -webkit-backdrop-filter: blur(26px) saturate(165%);
+      transition: transform var(--transition-fluid), border-color var(--transition-fluid), box-shadow var(--transition-fluid);
+    }
+
+    @supports not ((backdrop-filter: blur(10px)) or (-webkit-backdrop-filter: blur(10px))) {
+      .glass-panel {
+        background: var(--bg-elevated);
+      }
+    }
+
+    .glass-card {
+      background: var(--glass-card);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-lg);
+      padding: 1.15rem;
+      transition: all var(--transition-fluid);
+    }
+
+    .glass-card:hover {
+      border-color: var(--glass-border-highlight);
+    }
+
+    /* Focus Accessibility */
+    button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible, [tabindex]:focus-visible {
+      outline: none;
+      box-shadow: var(--focus-ring);
+    }
+
+    /* Top Navigation Bar */
+    .top-nav {
+      position: sticky;
+      top: 0.75rem;
+      z-index: 100;
+      max-width: 1400px;
+      margin: 0.75rem auto 0;
+      padding: 0.65rem 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      border-radius: 999px;
+    }
+
+    .brand-cluster {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      cursor: pointer;
+      text-decoration: none;
+      color: var(--text-primary);
+    }
+
+    .brand-orb {
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #38bdf8 0%, #60a5fa 50%, #a78bfa 100%);
+      display: grid;
+      place-items: center;
+      box-shadow: 0 4px 16px rgba(56, 189, 248, 0.38);
+      font-weight: 800;
+      color: #07090f;
+      font-size: 1.05rem;
+    }
+
+    .brand-title {
+      font-weight: 700;
+      font-size: 1.05rem;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    .brand-sub-pill {
+      font-size: 0.68rem;
+      font-weight: 600;
+      padding: 0.12rem 0.5rem;
+      border-radius: 999px;
+      background: var(--badge-bg);
+      color: var(--badge-text);
+      border: 1px solid var(--glass-border);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      flex-wrap: wrap;
+    }
+
+    .nav-btn {
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-secondary);
+      padding: 0.45rem 0.9rem;
+      border-radius: 999px;
+      font-size: 0.86rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all var(--transition-fluid);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .nav-btn:hover {
+      color: var(--text-primary);
+      background: var(--glass-card);
+    }
+
+    .nav-btn.active {
+      color: var(--text-primary);
+      background: var(--badge-bg);
+      border-color: var(--glass-border-highlight);
+      font-weight: 600;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .pill-btn {
+      background: var(--glass-card);
+      border: 1px solid var(--glass-border);
+      color: var(--text-primary);
+      padding: 0.42rem 0.82rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all var(--transition-fluid);
+    }
+
+    .pill-btn:hover {
+      border-color: var(--glass-border-highlight);
+      transform: translateY(-1px);
+    }
+
+    .primary-cta {
+      background: linear-gradient(135deg, #38bdf8 0%, #6366f1 100%);
+      color: #ffffff;
+      border: none;
+      padding: 0.68rem 1.35rem;
+      border-radius: 999px;
+      font-size: 0.92rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: 0 8px 24px rgba(56, 189, 248, 0.32);
+      transition: all var(--transition-fluid);
+    }
+
+    .primary-cta:hover {
+      transform: translateY(-1px) scale(1.01);
+      box-shadow: 0 12px 28px rgba(56, 189, 248, 0.45);
+    }
+
+    .primary-cta:active {
+      transform: translateY(0) scale(0.99);
+    }
+
+    /* Main Container */
+    .main-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 1.5rem 1.25rem 4rem;
+    }
+
+    .view-section {
+      display: none;
+    }
+
+    .view-section.active {
+      display: block;
+      animation: fadeSlideUp 280ms cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    @keyframes fadeSlideUp {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ==========================================================================
+       HERO & FLOATING INPUT STUDIO
+       ========================================================================== */
+    .hero-header {
+      text-align: center;
+      max-width: 820px;
+      margin: 2rem auto 1.75rem;
+    }
+
+    .mission-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.32rem 0.9rem;
+      border-radius: 999px;
+      background: var(--badge-bg);
+      color: var(--badge-text);
+      border: 1px solid var(--glass-border);
+      font-size: 0.78rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      letter-spacing: 0.02em;
+    }
+
+    .hero-headline {
+      font-size: clamp(2.1rem, 4.5vw, 3.5rem);
+      font-weight: 800;
+      letter-spacing: -0.035em;
+      line-height: 1.12;
+      margin-bottom: 0.9rem;
+      background: linear-gradient(135deg, var(--text-primary) 20%, #38bdf8 65%, #a78bfa 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-subtext {
+      font-size: clamp(1rem, 1.8vw, 1.16rem);
+      color: var(--text-secondary);
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    .studio-input-shell {
+      max-width: 920px;
+      margin: 1.75rem auto;
+      padding: 1.35rem;
+      transition: transform var(--transition-fluid), box-shadow var(--transition-fluid), border-color var(--transition-fluid);
+    }
+
+    .studio-input-shell:focus-within {
+      transform: translateY(-2px);
+      border-color: var(--accent-cyan);
+      box-shadow: 0 24px 60px rgba(56, 189, 248, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    }
+
+    .input-top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .detection-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.76rem;
+      font-weight: 600;
+      padding: 0.25rem 0.7rem;
+      border-radius: 999px;
+      background: rgba(52, 211, 153, 0.14);
+      color: var(--accent-emerald);
+      border: 1px solid rgba(52, 211, 153, 0.3);
+    }
+
+    .mode-pills {
+      display: flex;
+      gap: 0.35rem;
+      flex-wrap: wrap;
+    }
+
+    .mode-pill {
+      font-size: 0.75rem;
+      padding: 0.25rem 0.65rem;
+      border-radius: 999px;
+      border: 1px solid var(--glass-border);
+      background: var(--glass-card);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 160ms ease;
+    }
+
+    .mode-pill.active {
+      background: var(--badge-bg);
+      color: var(--badge-text);
+      border-color: var(--accent-cyan);
+      font-weight: 600;
+    }
+
+    .studio-textarea {
+      width: 100%;
+      min-height: 118px;
+      background: rgba(0, 0, 0, 0.18);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-lg);
+      padding: 1rem 1.1rem;
+      color: var(--text-primary);
+      font-size: 1rem;
+      font-family: inherit;
+      resize: vertical;
+      line-height: 1.55;
+    }
+
+    [data-theme="light"] .studio-textarea {
+      background: rgba(255, 255, 255, 0.75);
+    }
+
+    .input-Sub-drawer {
+      margin-top: 0.75rem;
+      padding: 0.9rem 1rem;
+      border-radius: var(--radius-md);
+      background: var(--glass-card);
+      border: 1px dashed var(--glass-border-highlight);
+      display: none;
+    }
+
+    .input-Sub-drawer.open {
+      display: block;
+    }
+
+    .input-bottom-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: 0.9rem;
+    }
+
+    .input-tool-group {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      flex-wrap: wrap;
+    }
+
+    /* Example Prompts Row */
+    .example-prompts-wrap {
+      max-width: 920px;
+      margin: 1rem auto 2.25rem;
+    }
+
+    .example-prompts-label {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      margin-bottom: 0.55rem;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .example-chips {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .example-chip {
+      background: var(--glass-card);
+      border: 1px solid var(--glass-border);
+      color: var(--text-secondary);
+      padding: 0.42rem 0.85rem;
+      border-radius: 999px;
+      font-size: 0.81rem;
+      cursor: pointer;
+      transition: all var(--transition-fluid);
+    }
+
+    .example-chip:hover {
+      color: var(--text-primary);
+      border-color: var(--accent-cyan);
+      background: var(--badge-bg);
+      transform: translateY(-1px);
+    }
+
+    /* Processing Stages Overlay Bar */
+    .processing-banner {
+      max-width: 920px;
+      margin: 1rem auto;
+      padding: 1.15rem 1.35rem;
+      display: none;
+    }
+
+    .processing-banner.active {
+      display: block;
+    }
+
+    .stage-steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
+      gap: 0.5rem;
+      margin-top: 0.8rem;
+    }
+
+    .stage-pill {
+      padding: 0.45rem 0.65rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.76rem;
+      background: var(--glass-card);
+      border: 1px solid var(--glass-border);
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .stage-pill.done {
+      border-color: rgba(52, 211, 153, 0.45);
+      color: var(--accent-emerald);
+      background: rgba(52, 211, 153, 0.1);
+    }
+
+    .stage-pill.current {
+      border-color: var(--accent-cyan);
+      color: var(--text-primary);
+      background: var(--badge-bg);
+      font-weight: 600;
+    }
+
+    /* Capability Grid */
+    .capability-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .capability-card {
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .capability-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: var(--badge-bg);
+      color: var(--accent-cyan);
+      display: grid;
+      place-items: center;
+      font-size: 1.2rem;
+      margin-bottom: 0.75rem;
+      border: 1px solid var(--glass-border);
+    }
+
+    /* ==========================================================================
+       3-COLUMN ADAPTIVE LEARNING WORKSPACE
+       ========================================================================== */
+    .workspace-grid {
+      display: grid;
+      grid-template-columns: 270px minmax(0, 1fr) 330px;
+      gap: 1.15rem;
+      align-items: start;
+    }
+
+    .workspace-sidebar-left, .workspace-sidebar-right {
+      position: sticky;
+      top: 5.1rem;
+      max-height: calc(100vh - 6rem);
+      overflow-y: auto;
+      padding: 1.1rem;
+    }
+
+    .workspace-canvas {
+      padding: 1.5rem;
+      min-width: 0;
+    }
+
+    .controls-ribbon {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
+      gap: 0.65rem;
+      padding: 0.95rem;
+      border-radius: var(--radius-lg);
+      background: var(--glass-card);
+      border: 1px solid var(--glass-border);
+      margin-bottom: 1rem;
+    }
+
+    .control-field label {
+      display: block;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin-bottom: 0.25rem;
+      font-weight: 600;
+    }
+
+    .control-select {
+      width: 100%;
+      padding: 0.42rem 0.6rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--glass-border);
+      background: var(--bg-elevated);
+      color: var(--text-primary);
+      font-size: 0.82rem;
+      font-family: inherit;
+    }
+
+    .action-bar-scroll {
+      display: flex;
+      gap: 0.42rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.35rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    .action-chip {
+      font-size: 0.76rem;
+      padding: 0.35rem 0.72rem;
+      border-radius: 999px;
+      background: var(--glass-card);
+      border: 1px solid var(--glass-border);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 150ms ease;
+    }
+
+    .action-chip:hover {
+      background: var(--badge-bg);
+      color: var(--badge-text);
+      border-color: var(--accent-cyan);
+    }
+
+    .lesson-block {
+      margin-bottom: 1.65rem;
+      padding: 1.25rem;
+      border-radius: var(--radius-lg);
+      background: var(--glass-card);
+      border: 1px solid var(--glass-border);
+    }
+
+    .block-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      margin-bottom: 0.85rem;
+    }
+
+    .block-eyebrow {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--accent-cyan);
+    }
+
+    .grounding-tag {
+      font-size: 0.68rem;
+      padding: 0.14rem 0.5rem;
+      border-radius: 999px;
+      font-weight: 600;
+      background: rgba(56, 189, 248, 0.12);
+      color: var(--badge-text);
+      border: 1px solid var(--glass-border);
+    }
+
+    /* Interactive Visualization Stage */
+    .viz-stage {
+      background: rgba(7, 9, 15, 0.55);
+      border: 1px solid var(--glass-border-highlight);
+      border-radius: var(--radius-lg);
+      padding: 1.15rem;
+      margin-top: 0.75rem;
+      overflow-x: auto;
+    }
+
+    [data-theme="light"] .viz-stage {
+      background: rgba(241, 245, 249, 0.85);
+    }
+
+    .sim-controls-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.75rem;
+      margin-top: 0.85rem;
+      padding: 0.75rem;
+      border-radius: var(--radius-md);
+      background: var(--glass-card);
+      border: 1px solid var(--glass-border);
+    }
+
+    .node-inspector {
+      margin-top: 0.85rem;
+      padding: 0.95rem 1.1rem;
+      border-radius: var(--radius-md);
+      background: rgba(56, 189, 248, 0.08);
+      border-left: 3px solid var(--accent-cyan);
+      font-size: 0.88rem;
+    }
+
+    /* Tables */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.86rem;
+      margin-top: 0.5rem;
+    }
+
+    .data-table th, .data-table td {
+      padding: 0.68rem 0.85rem;
+      border-bottom: 1px solid var(--glass-border);
+      text-align: left;
+    }
+
+    .data-table th {
+      background: var(--badge-bg);
+      color: var(--badge-text);
+      font-weight: 600;
+    }
+
+    /* Code Block & Line Trace */
+    .code-trace-row {
+      display: grid;
+      grid-template-columns: 36px 1.2fr 1fr;
+      gap: 0.75rem;
+      padding: 0.48rem 0.65rem;
+      border-radius: var(--radius-sm);
+      font-family: "JetBrains Mono", "Fira Code", monospace;
+      font-size: 0.8rem;
+      border: 1px solid transparent;
+      cursor: pointer;
+      align-items: center;
+    }
+
+    .code-trace-row:hover, .code-trace-row.active-line {
+      background: rgba(56, 189, 248, 0.14);
+      border-color: var(--accent-cyan);
+    }
+
+    /* Tutor Chat Messages */
+    .tutor-messages {
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+      max-height: 360px;
+      overflow-y: auto;
+      margin: 0.75rem 0;
+      padding-right: 0.25rem;
+    }
+
+    .tutor-bubble {
+      padding: 0.7rem 0.85rem;
+      border-radius: var(--radius-md);
+      font-size: 0.84rem;
+      line-height: 1.5;
+    }
+
+    .tutor-bubble.assistant {
+      background: var(--glass-card);
+      border: 1px solid var(--glass-border);
+    }
+
+    .tutor-bubble.user {
+      background: var(--badge-bg);
+      border: 1px solid var(--glass-border-highlight);
+      align-self: flex-end;
+    }
+
+    /* Flashcards Grid */
+    .flashcard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 0.85rem;
+    }
+
+    .flashcard-item {
+      padding: 1rem;
+      border-radius: var(--radius-md);
+      background: var(--glass-surface);
+      border: 1px solid var(--glass-border);
+      cursor: pointer;
+      min-height: 125px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .flashcard-item:hover {
+      border-color: var(--accent-violet);
+    }
+
+    /* Modal Dialog */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 250;
+      background: rgba(5, 8, 15, 0.76);
+      backdrop-filter: blur(10px);
+      display: none;
+      place-items: center;
+      padding: 1rem;
+    }
+
+    .modal-backdrop.open {
+      display: grid;
+    }
+
+    .modal-panel {
+      width: 100%;
+      max-width: 720px;
+      max-height: 88vh;
+      overflow-y: auto;
+      padding: 1.5rem;
+    }
+
+    /* Print Stylesheet for Clean PDF Export */
+    @media print {
+      .top-nav, .workspace-sidebar-left, .workspace-sidebar-right, .controls-ribbon, .action-bar-scroll {
+        display: none !important;
+      }
+      .workspace-grid {
+        display: block !important;
+      }
+      body {
+        background: #ffffff !important;
+        color: #000000 !important;
+      }
+    }
+
+    /* Responsive Breakpoints (Mobile & Tablet) */
+    @media (max-width: 1080px) {
+      .workspace-grid {
+        grid-template-columns: 1fr;
+      }
+      .workspace-sidebar-left, .workspace-sidebar-right {
+        position: static;
+        max-height: none;
+      }
+      .top-nav {
+        border-radius: var(--radius-lg);
+        flex-wrap: wrap;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="ambient-canvas" aria-hidden="true"></div>
+
+  <!-- ========================================================================
+       NAVIGATION BAR
+       ======================================================================== -->
+  <header class="top-nav glass-panel" role="banner">
+    <a href="#studio" class="brand-cluster" onclick="switchView('studio'); return false;" aria-label="Lumora AI Home">
+      <div class="brand-orb">L</div>
+      <div class="brand-title">
+        <span>Lumora AI</span>
+        <span class="brand-sub-pill">DeepLearn Hub</span>
+      </div>
+    </a>
+
+    <nav class="nav-links" aria-label="Primary Navigation">
+      <button class="nav-btn active" id="nav-studio" onclick="switchView('studio')">✦ AI Studio</button>
+      <button class="nav-btn" id="nav-workspace" onclick="switchView('workspace')">📖 Learning Workspace</button>
+      <button class="nav-btn" id="nav-explore" onclick="switchView('explore')">🔬 Visual Simulations</button>
+      <button class="nav-btn" id="nav-library" onclick="switchView('library')">🗂 My Learning (<span id="saved-count-badge">0</span>)</button>
+      <button class="nav-btn" id="nav-architecture" onclick="switchView('architecture')">⚙️ Full-Stack & QA Suite</button>
+    </nav>
+
+    <div class="nav-actions">
+      <button class="pill-btn" id="api-status-btn" onclick="openModal('api-modal')" title="Configure Live LLM Provider or Inspect Engine Mode">
+        <span id="api-dot" style="color: var(--accent-amber);">●</span>
+        <span id="api-status-label">Local Engine Mode</span>
+      </button>
+      <button class="pill-btn" onclick="toggleTheme()" id="theme-toggle-btn" aria-label="Toggle Dark and Light Theme">
+        <span id="theme-icon">🌙</span> <span id="theme-text">Dark</span>
+      </button>
+      <button class="pill-btn" onclick="toggleReducedMotion()" id="motion-toggle-btn" title="Toggle Reduced Motion Accessibility">
+        <span>♿ Motion:</span> <span id="motion-status-text">Standard</span>
+      </button>
+      <button class="pill-btn" onclick="openModal('account-modal')" id="account-btn">
+        <span>👤</span> <span id="active-user-badge">Alice (Signed In)</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="main-container" role="main">
+
+    <!-- ======================================================================
+         VIEW 1: HOME PAGE — THE AI LEARNING STUDIO
+         ====================================================================== -->
+    <section id="view-studio" class="view-section active" aria-labelledby="hero-title">
+      <div class="hero-header">
+        <div class="mission-tag">
+          <span>✦ Understand anything. Visualize everything. Learn your way.</span>
+        </div>
+        <h1 class="hero-headline" id="hero-title">Complex ideas. Clear understanding.</h1>
+        <p class="hero-subtext">
+          Drop in a question, video, document, or link. Your AI tutor turns it into a visual, interactive lesson designed around how you learn.
+        </p>
+      </div>
+
+      <!-- Floating Liquid Glass Input Workspace -->
+      <div class="studio-input-shell glass-panel" role="region" aria-label="Universal Learning Input Workspace">
+        <div class="input-top-bar">
+          <div style="display:flex; align-items:center; gap:0.55rem; flex-wrap:wrap;">
+            <span class="detection-pill" id="live-input-badge">Auto-Detected: Question / Concept</span>
+            <span id="char-counter" style="font-size:0.74rem; color:var(--text-muted);">0 / 50,000 chars</span>
+          </div>
+          <div class="mode-pills" role="radiogroup" aria-label="Specialized Learning Mode">
+            <button class="mode-pill active" data-mode="study" onclick="selectLearningMode('study', this)">Study Mode</button>
+            <button class="mode-pill" data-mode="visual" onclick="selectLearningMode('visual', this)">Visual Mode</button>
+            <button class="mode-pill" data-mode="video" onclick="selectLearningMode('video', this)">Video Mode</button>
+            <button class="mode-pill" data-mode="code" onclick="selectLearningMode('code', this)">Code Mode</button>
+            <button class="mode-pill" data-mode="exam" onclick="selectLearningMode('exam', this)">Exam Mode</button>
+            <button class="mode-pill" data-mode="research" onclick="selectLearningMode('research', this)">Research Mode</button>
+          </div>
+        </div>
+
+        <textarea
+          id="universal-input"
+          class="studio-textarea"
+          placeholder="Paste a YouTube link, ask a question, or tell me what you want to understand…"
+          aria-label="Learning topic, question, passage, code snippet, or URL"
+          oninput="handleInputTyping()"
+        ></textarea>
+
+        <!-- Paste Link Sub-Drawer (YouTube / Website URL with Transcript Language & SSRF Verification) -->
+        <div id="link-drawer" class="input-Sub-drawer">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
+            <strong style="font-size:0.85rem; color:var(--accent-cyan);">🔗 Universal URL & YouTube Transcript Ingestion</strong>
+            <button class="pill-btn" style="padding:0.2rem 0.55rem; font-size:0.72rem;" onclick="toggleSubDrawer('link-drawer')">Close</button>
+          </div>
+          <div style="display:grid; grid-template-columns: 1fr auto auto; gap:0.5rem; align-items:center;">
+            <input type="url" id="url-field" class="control-select" placeholder="https://www.youtube.com/watch?v=aircAruvnKk or public article URL" />
+            <select id="yt-lang-select" class="control-select" style="width:auto;" aria-label="Transcript Language">
+              <option value="en">Captions: English (en)</option>
+              <option value="ta">Captions: தமிழ் (ta)</option>
+            </select>
+            <button class="pill-btn" onclick="processUrlIngestion()">Verify & Load URL</button>
+          </div>
+          <div style="display:flex; gap:0.45rem; flex-wrap:wrap; margin-top:0.55rem; font-size:0.75rem;">
+            <span style="color:var(--text-muted);">Verified Captioned Videos:</span>
+            <button class="action-chip" onclick="fillVerifiedYouTube('https://www.youtube.com/watch?v=aircAruvnKk')">▶ 3Blue1Brown: Neural Networks</button>
+            <button class="action-chip" onclick="fillVerifiedYouTube('https://www.youtube.com/watch?v=zWg7U0OEAoE')">▶ OS Virtual Memory & Paging</button>
+            <button class="action-chip" onclick="fillVerifiedYouTube('https://www.youtube.com/watch?v=f79MRyMsjrQ')">▶ CS50: Binary Search</button>
+            <button class="action-chip" onclick="fillVerifiedYouTube('https://www.youtube.com/watch?v=XyZ98765432')">⚠️ Test Uncaptioned Video Fallback</button>
+            <button class="action-chip" onclick="fillVerifiedYouTube('http://127.0.0.1:8080/private')">🛡 Test SSRF Block</button>
+          </div>
+          <div id="url-status-box" style="margin-top:0.65rem; display:none;"></div>
+        </div>
+
+        <!-- Document Upload Sub-Drawer (PDF, TXT, DOCX, MD) -->
+        <div id="upload-drawer" class="input-Sub-drawer">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
+            <strong style="font-size:0.85rem; color:var(--accent-violet);">📄 Document Ingestion (PDF, TXT, DOCX, Markdown — Max 10 MB)</strong>
+            <button class="pill-btn" style="padding:0.2rem 0.55rem; font-size:0.72rem;" onclick="toggleSubDrawer('upload-drawer')">Close</button>
+          </div>
+          <div style="display:flex; gap:0.6rem; flex-wrap:wrap; align-items:center;">
+            <input type="file" id="doc-file-input" accept=".pdf,.txt,.docx,.md,.markdown" onchange="handleFileUpload(event)" style="font-size:0.82rem;" />
+            <button class="action-chip" onclick="loadSampleDocument('valid_pdf')">📄 Load Sample Lecture PDF (OS Paging)</button>
+            <button class="action-chip" onclick="loadSampleDocument('valid_md')">📝 Load Sample Biology Notes (.md)</button>
+            <button class="action-chip" onclick="loadSampleDocument('encrypted_pdf')">🔒 Test Encrypted PDF Error State</button>
+          </div>
+          <div id="upload-preview-box" style="margin-top:0.65rem; display:none;"></div>
+        </div>
+
+        <div class="input-bottom-bar">
+          <div class="input-tool-group">
+            <button class="pill-btn" onclick="toggleSubDrawer('link-drawer')" title="Paste YouTube or Web Article URL">🔗 Paste Link / YouTube</button>
+            <button class="pill-btn" onclick="toggleSubDrawer('upload-drawer')" title="Upload PDF, TXT, DOCX, or Markdown">📄 Upload Document</button>
+            <button class="pill-btn" onclick="startVoiceInput()" id="voice-btn" title="Voice Input (Browser SpeechRecognition)">🎙 Voice Input</button>
+            <button class="pill-btn" onclick="clearStudioInput()" title="Clear input workspace">✕ Clear</button>
+          </div>
+
+          <button class="primary-cta" id="teach-me-btn" onclick="triggerTeachMe()">
+            <span>✦ Teach Me</span>
+            <span>→</span>
+          </button>
+        </div>
+
+        <div id="input-validation-alert" role="alert" style="display:none; margin-top:0.75rem; padding:0.7rem 0.95rem; border-radius:var(--radius-sm); background:rgba(251, 113, 133, 0.14); border:1px solid var(--accent-rose); color:var(--accent-rose); font-size:0.84rem;"></div>
+      </div>
+
+      <!-- Real 6-Stage Processing Pipeline Banner -->
+      <div id="processing-pipeline" class="processing-banner glass-panel" role="status" aria-live="polite">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <strong id="processing-title" style="color:var(--accent-cyan);">Processing Learning Experience...</strong>
+            <p id="processing-subtitle" style="font-size:0.8rem; color:var(--text-secondary);">Executing honest pedagogical pipeline stages</p>
+          </div>
+          <button class="pill-btn" onclick="cancelActiveProcessing()" style="border-color:var(--accent-rose); color:var(--accent-rose);">✕ Cancel Operation</button>
+        </div>
+        <div class="stage-steps" id="stage-steps-container">
+          <div class="stage-pill" data-stage="0">1. Validating input</div>
+          <div class="stage-pill" data-stage="1">2. Extracting content</div>
+          <div class="stage-pill" data-stage="2">3. Identifying concepts</div>
+          <div class="stage-pill" data-stage="3">4. Building the lesson</div>
+          <div class="stage-pill" data-stage="4">5. Generating visuals</div>
+          <div class="stage-pill" data-stage="5">6. Preparing workspace</div>
+        </div>
+      </div>
+
+      <!-- Clickable Example Prompts -->
+      <div class="example-prompts-wrap">
+        <div class="example-prompts-label">Click an example prompt to launch an interactive visual lesson</div>
+        <div class="example-chips">
+          <button class="example-chip" onclick="launchExamplePrompt('Explain how an operating system manages memory.', 'study')">“Explain how an operating system manages memory.”</button>
+          <button class="example-chip" onclick="launchExamplePrompt('Teach me recursion using an interactive visual.', 'visual')">“Teach me recursion using an interactive visual.”</button>
+          <button class="example-chip" onclick="launchExamplePrompt('Turn this lecture into simple notes: Photosynthetic phosphorylation in chloroplasts converts light energy into chemical ATP bonds via photolysis in Photosystem II, electron transport across plastoquinone, and chemiosmotic ATP synthase.', 'study')">“Turn this lecture into simple notes.”</button>
+          <button class="example-chip" onclick="launchYouTubeExample('https://www.youtube.com/watch?v=aircAruvnKk')">“Explain this YouTube video with diagrams.”</button>
+          <button class="example-chip" onclick="launchExamplePrompt('Show me how a neural network learns.', 'visual')">“Show me how a neural network learns.”</button>
+          <button class="example-chip" onclick="launchExamplePrompt('Help me understand this Java program line by line: synchronized BankAccount threads and race conditions.', 'code')">“Help me understand this Java program line by line.”</button>
+          <button class="example-chip" onclick="launchExamplePrompt('Teach me binary search step by step with an interactive array simulation.', 'visual')">“Teach me binary search with an interactive array.”</button>
+        </div>
+      </div>
+
+      <!-- Interactive Product Transformation Preview on Home Page -->
+      <div class="glass-panel" style="padding:1.35rem; margin-bottom:2rem;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem; margin-bottom:1rem;">
+          <div>
+            <span class="block-eyebrow">Interactive Studio Preview</span>
+            <h2 style="font-size:1.2rem; font-weight:700;">See How Lumora Transforms Confusion into Visual Clarity</h2>
+          </div>
+          <div style="display:flex; gap:0.4rem;">
+            <button class="action-chip" onclick="setHomePreviewTopic('nn')">Preview: Neural Network</button>
+            <button class="action-chip" onclick="setHomePreviewTopic('bs')">Preview: Binary Search</button>
+            <button class="action-chip" onclick="setHomePreviewTopic('threads')">Preview: Java Threads</button>
+          </div>
+        </div>
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap:1rem;" id="home-live-preview-container"></div>
+      </div>
+
+      <!-- 6 Capability Cards -->
+      <div class="capability-grid" aria-label="Core Platform Capabilities">
+        <div class="glass-card capability-card" onclick="launchExamplePrompt('Show me how a neural network learns.', 'visual')">
+          <div class="capability-icon">📐</div>
+          <h3 style="font-size:1.02rem; margin-bottom:0.35rem;">Visual Explanations</h3>
+          <p style="font-size:0.85rem; color:var(--text-secondary);">Interactive node diagrams, architecture flowcharts, and annotated system maps where every component responds to selection.</p>
+        </div>
+        <div class="glass-card capability-card" onclick="launchYouTubeExample('https://www.youtube.com/watch?v=aircAruvnKk')">
+          <div class="capability-icon">▶</div>
+          <h3 style="font-size:1.02rem; margin-bottom:0.35rem;">YouTube Learning</h3>
+          <p style="font-size:0.85rem; color:var(--text-secondary);">Transforms verified video transcripts into timestamped chapters, visual concept maps, and self-check quizzes with honest caption telemetry.</p>
+        </div>
+        <div class="glass-card capability-card" onclick="toggleSubDrawer('upload-drawer'); window.scrollTo({top: 200, behavior: 'smooth'});">
+          <div class="capability-icon">📄</div>
+          <h3 style="font-size:1.02rem; margin-bottom:0.35rem;">Document Understanding</h3>
+          <p style="font-size:0.85rem; color:var(--text-secondary);">Ingests PDFs, DOCX, Markdown, and lecture notes with page references, extracted previews, and grounded fact tags.</p>
+        </div>
+        <div class="glass-card capability-card" onclick="switchView('explore')">
+          <div class="capability-icon">⚡</div>
+          <h3 style="font-size:1.02rem; margin-bottom:0.35rem;">Interactive Simulations</h3>
+          <p style="font-size:0.85rem; color:var(--text-secondary);">Manipulate neural weights, step through binary search intervals, compare thread locks, and unwind recursive call stacks live.</p>
+        </div>
+        <div class="glass-card capability-card" onclick="launchExamplePrompt('Help me understand this Java program line by line: synchronized BankAccount threads and race conditions.', 'code')">
+          <div class="capability-icon">💻</div>
+          <h3 style="font-size:1.02rem; margin-bottom:0.35rem;">Coding Tutorials</h3>
+          <p style="font-size:0.85rem; color:var(--text-secondary);">Line-by-line execution walkthroughs with live variable state inspection, algorithm complexity tables, and edge-case traps.</p>
+        </div>
+        <div class="glass-card capability-card" onclick="launchExamplePrompt('Explain how an operating system manages memory.', 'exam')">
+          <div class="capability-icon">🎓</div>
+          <h3 style="font-size:1.02rem; margin-bottom:0.35rem;">Exam Preparation</h3>
+          <p style="font-size:0.85rem; color:var(--text-secondary);">Structured 2-mark, 13-mark, and 15-mark university answers complete with formal definitions, diagrams, flashcards, and quizzes.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         VIEW 2: THREE-COLUMN INTERACTIVE LEARNING WORKSPACE
+         ====================================================================== -->
+    <section id="view-workspace" class="view-section" aria-label="Interactive Learning Workspace">
+      <div class="workspace-grid">
+
+        <!-- LEFT SIDEBAR: LEARNING NAVIGATION, SOURCE, BOOKMARKS & HISTORY -->
+        <aside class="workspace-sidebar-left glass-panel" aria-label="Lesson Navigation and Bookmarks">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
+            <span class="block-eyebrow">Lesson Navigator</span>
+            <button class="action-chip" onclick="saveCurrentLessonToLibrary()" title="Save Lesson to Personal Library">★ Save Lesson</button>
+          </div>
+          <div id="left-active-lesson-title" style="font-weight:700; font-size:0.95rem; margin-bottom:0.85rem; color:var(--text-primary);"></div>
+
+          <!-- Progress Tracker -->
+          <div style="margin-bottom:1rem; padding:0.65rem; border-radius:var(--radius-sm); background:var(--glass-card); border:1px solid var(--glass-border);">
+            <div style="display:flex; justify-content:space-between; font-size:0.75rem; margin-bottom:0.3rem;">
+              <span>Lesson Exploration</span>
+              <span id="lesson-progress-label">0%</span>
+            </div>
+            <div style="height:6px; background:rgba(255,255,255,0.08); border-radius:999px; overflow:hidden;">
+              <div id="lesson-progress-bar" style="height:100%; width:0%; background:linear-gradient(90deg, var(--accent-cyan), var(--accent-emerald)); transition:width 240ms ease;"></div>
+            </div>
+            <p style="font-size:0.68rem; color:var(--text-muted); margin-top:0.3rem;">Tracks completed concepts & quiz attempts (never claims mastery from opening alone).</p>
+          </div>
+
+          <div style="margin-bottom:1rem;">
+            <div class="block-eyebrow" style="margin-bottom:0.4rem;">Table of Contents</div>
+            <div id="toc-list" style="display:flex; flex-direction:column; gap:0.28rem;"></div>
+          </div>
+
+          <div style="margin-bottom:1rem;">
+            <div class="block-eyebrow" style="margin-bottom:0.4rem;">Key Concepts Checklist</div>
+            <div id="sidebar-concepts-list" style="display:flex; flex-direction:column; gap:0.35rem;
+The content is large truncated here but full content included in call continues...
